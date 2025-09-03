@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const SignupForm = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [repeatPassword, setRepeatPassword] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -17,10 +19,20 @@ const SignupForm = () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name, email, password }),
     })
-      .then(res => res.json())
-      .then(data => {
-        alert('Signup successful (stubbed)');
-      });
+      .then(res => {
+    if (!res.ok) {
+      return res.text().then(text => { throw new Error(text); });  // Get text if not JSON
+    }
+    return res.json();
+  })
+  .then(data => {
+    alert('Signup successful (stubbed)');
+    navigate('/home');  // Redirect to home page
+  })
+  .catch(err => {
+    console.error('Fetch error:', err);
+    alert('Signup failed: ' + err.message);
+  });
   };
 
   return (

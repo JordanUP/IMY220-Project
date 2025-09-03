@@ -1,8 +1,11 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const LoginForm = () => {
-    const [email, setEmail] = React.useState("");
-    const [password, setPassword] = React.useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const navigate = useNavigate();
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -19,7 +22,12 @@ const LoginForm = () => {
             .then(data => {
                 localStorage.setItem('token', data.token);
                 alert('Login successful (stubbed)');
-        });
+                navigate('/home');  // Redirect to home page
+            })
+            .catch(err => {
+                console.error('Fetch error:', err);
+                alert('Login failed: ' + err.message);
+            });
     };
 
     return (

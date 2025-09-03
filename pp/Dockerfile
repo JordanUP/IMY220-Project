@@ -1,16 +1,22 @@
 FROM node:18
 
+# Set working directory
 WORKDIR /app
 
+# Copy package files
 COPY package*.json ./
+
+# Install dependencies
 RUN npm install
 
+# Copy all source code
 COPY . .
 
-# Build frontend
+# Build frontend for production
 RUN npm run build
 
-# Expose ports
-EXPOSE 3000 5000
+# Expose the port
+EXPOSE 5000
 
-CMD ["npm", "run", "start:backend"]  // Run backend, serve dist for frontend
+# Start the server
+CMD ["npm", "run", "start:backend"]
